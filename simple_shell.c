@@ -2,54 +2,53 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/wait.h>
 
 #define MAX_COMMAND_LENGTH 100
 
 /**
- * display_prompt - Displays the prompt for the shell.
+ * display_prompt - Displays the shell prompt.
  */
-void display_prompt()
+void display_prompt(void)
 {
-printf("# simple_shell$ ");
-fflush(stdout);
+printf("simple_shell$ ");
 }
 
 /**
- * main - Entry point for the simple shell.
+ * main - The main function for the simple shell.
  *
  * Return: Always 0.
  */
-int main()
+int main(void)
 {
-pid_t pid = fork();
 char command[MAX_COMMAND_LENGTH];
-
 while (1)
 {
 display_prompt();
-
-if (fgets(command, sizeof(command), stdin) == NULL)
+if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
 {
-printf("\n");
+printf("\nExiting shell...\n");
 break;
 }
 
-command[strcspn(command, "\n")] = '\0';
+size_t len = strlen(command);
+if (len > 0 && command[len - 1] == '\n')
+{
+command[len - 1] = '\0';
+}
 
-
+pid_t pid = fork();
 if (pid == -1)
 {
-perror("Fork error");
+perror("fork");
 exit(EXIT_FAILURE);
 }
 
 if (pid == 0)
 {
-if (execlp(command, command, (char *)NULL) == -1)
+if (execve(command, NULL, NULL) == -1)
 {
-perror("Error");
+perror("execve");
 exit(EXIT_FAILURE);
 }
 }
@@ -58,13 +57,9 @@ else
 int status;
 waitpid(pid, &status, 0);
 
-if (WIFEXITED(status))
+if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
 {
-printf("Child process exited with status %d\n", WEXITSTATUS(status));
-}
-else if (WIFSIGNALED(status))
-{
-printf("Child process terminated by signal %d\n", WTERMSIG(status));
+printf("Command execution failed\n");
 }
 }
 }
