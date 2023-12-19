@@ -6,6 +6,7 @@
 
 #define MAX_COMMAND_LENGTH 100
 
+
 /**
  * display_prompt - Displays the shell prompt.
  */
@@ -22,6 +23,8 @@ printf("simple_shell$ ");
 int main(void)
 {
 char command[MAX_COMMAND_LENGTH];
+size_t len;
+
 while (1)
 {
 display_prompt();
@@ -31,7 +34,7 @@ printf("\nExiting shell...\n");
 break;
 }
 
-size_t len = strlen(command);
+len = strlen(command);
 if (len > 0 && command[len - 1] == '\n')
 {
 command[len - 1] = '\0';
@@ -46,7 +49,8 @@ exit(EXIT_FAILURE);
 
 if (pid == 0)
 {
-if (execve(command, NULL, NULL) == -1)
+char *args[] = {command, NULL};
+if (execve(command, args, NULL) == -1)
 {
 perror("execve");
 exit(EXIT_FAILURE);
