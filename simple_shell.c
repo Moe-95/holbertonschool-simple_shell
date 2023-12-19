@@ -66,7 +66,7 @@ continue;
 
 if(pid == 0)
 {
-if(execve(command, NULL, environ) == -1)
+if(execve(command, NULL, NULL) == -1)
 {
 printf("%s: No such file or directory\n", command);
 exit(EXIT_FAILURE);
