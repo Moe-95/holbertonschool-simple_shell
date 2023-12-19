@@ -23,6 +23,7 @@ fflush(stdout);
  */
 int main()
 {
+pid_t pid = fork();
 char command[MAX_COMMAND_LENGTH];
 
 while (1)
@@ -37,7 +38,6 @@ break;
 
 command[strcspn(command, "\n")] = '\0';
 
-pid_t pid = fork();
 
 if (pid == -1)
 {
