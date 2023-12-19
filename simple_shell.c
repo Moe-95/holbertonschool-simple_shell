@@ -6,13 +6,24 @@
 
 #define MAX_COMMAND_LENGTH 100
 
+/**
+ * display_prompt - Displays the shell prompt.
+ */
+void display_prompt(void);
+
+/**
+ * main - The main function for the simple shell.
+ *
+ * Return: Always 0.
+ */
+int main(void);
 
 /**
  * display_prompt - Displays the shell prompt.
  */
 void display_prompt(void)
 {
-printf("simple_shell$ ");
+printf("simple_shell$");
 }
 
 /**
