@@ -14,6 +14,7 @@ void execute_command(char *command);
 void display_prompt(void)
 {
 printf("#cisfun$ ");
+fflush(stdout);
 }
 /**
  * main - Entry point of the program
