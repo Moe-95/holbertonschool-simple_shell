@@ -85,18 +85,7 @@ return (0);
  */
 void execute_command(char *command)
 {
-char **args = malloc(4 * sizeof(char *));
-if (args == NULL)
-{
-perror("malloc");
-exit(EXIT_FAILURE);
-}
-
-args[0] = "/bin/sh";
-args[1] = "-c";
-args[2] = command;
-args[3] = NULL;
-
+char *args[] = {"/bin/sh", "-c", command, NULL};
 execve("/bin/sh", args, NULL);
 perror("execve");
 exit(EXIT_FAILURE);
