@@ -38,7 +38,7 @@ if(fgets(command, BUF_SIZE, stdin) == NULL)
 if(feof(stdin))
 {
 printf("\n");
-return(0);
+break;
 }
 else
 {
