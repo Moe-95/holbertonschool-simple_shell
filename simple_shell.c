@@ -12,7 +12,7 @@
  */
 void display_prompt(void)
 {
-printf("simple_shell$");
+    printf("simple_shell$ ");
 }
 
 /**
@@ -25,9 +25,8 @@ int main(void)
 char command[MAX_COMMAND_LENGTH];
 size_t len;
 pid_t pid;
-char *args[2];
+char *args[4];
 int status;
-
 while (1)
 {
 display_prompt();
@@ -36,25 +35,24 @@ if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
 printf("\nExiting shell...\n");
 break;
 }
-
 len = strlen(command);
 if (len > 0 && command[len - 1] == '\n')
 {
 command[len - 1] = '\0';
 }
-
 pid = fork();
 if (pid == -1)
 {
 perror("fork");
 exit(EXIT_FAILURE);
 }
-
 if (pid == 0)
 {
-args[0] = command;
-args[1] = NULL;
-if (execve(command, args, NULL) == -1)
+args[0] = "/bin/sh";
+args[1] = "-c";
+args[2] = command;
+args[3] = NULL;
+if (execve(args[0], args, NULL) == -1)
 {
 perror("execve");
 exit(EXIT_FAILURE);
@@ -63,13 +61,11 @@ exit(EXIT_FAILURE);
 else
 {
 waitpid(pid, &status, 0);
-
 if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
 {
 printf("Command execution failed\n");
 }
 }
 }
-
 return (0);
 }
