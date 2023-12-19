@@ -6,66 +6,65 @@
 
 #define MAX_COMMAND_LENGTH 100
 
-
 /**
- * display_prompt - Displays the shell prompt.
+ * Displays the shell prompt.
  */
-void display_prompt(void)
-{
-    printf("simple_shell$ ");
-}
+void display_prompt(void);
 
 /**
- * main - The main function for the simple shell.
+ * The main function for the simple shell.
  *
  * Return: Always 0.
  */
+int main(void);
+
+void display_prompt(void)
+{
+printf("simple_shell$ ");
+}
+
 int main(void)
 {
 char command[MAX_COMMAND_LENGTH];
 size_t len;
 pid_t pid;
-char *args[4];
+char *args[2];
 int status;
-while (1)
-{
+
+while (1) {
 display_prompt();
-if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL)
-{
-printf("\nExiting shell...\n");
-break;
+
+if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL) {
+printf("\n");
+continue;
 }
+
 len = strlen(command);
-if (len > 0 && command[len - 1] == '\n')
-{
+if (len > 0 && command[len - 1] == '\n') {
 command[len - 1] = '\0';
 }
+
 pid = fork();
-if (pid == -1)
-{
+if (pid == -1) {
 perror("fork");
 exit(EXIT_FAILURE);
 }
-if (pid == 0)
-{
-args[0] = "/bin/sh";
-args[1] = "-c";
-args[2] = command;
-args[3] = NULL;
-if (execve(args[0], args, NULL) == -1)
-{
+
+if (pid == 0) {
+args[0] = command;
+args[1] = NULL;
+if (execve(command, args, NULL) == -1) {
 perror("execve");
 exit(EXIT_FAILURE);
 }
-}
-else
-{
+} else {
 waitpid(pid, &status, 0);
-if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
-{
+
+if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE) {
 printf("Command execution failed\n");
 }
 }
 }
-return (0);
+
+return(0);
 }
