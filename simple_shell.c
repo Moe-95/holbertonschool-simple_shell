@@ -28,7 +28,8 @@ int main(void)
 char command[BUF_SIZE];
 pid_t pid;
 int status;
-
+char *empty_args[] = {};
+execve(command, empty_args, NULL);
 while(1)
 {
 display_prompt();
