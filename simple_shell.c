@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 
-#define MAX_COMMAND_LENGTH 100
+#define BUF_SIZE 100
 
 /**
  * Displays the shell prompt.
@@ -14,54 +14,71 @@ void display_prompt(void);
 /**
  * The main function for the simple shell.
  *
- * Return: Always 0.
+ * Returns: Always 0.
  */
 int main(void);
 
 void display_prompt(void)
 {
-printf("simple_shell$ ");
+printf("#cisfun$ ");
 }
 
 int main(void)
 {
-char command[MAX_COMMAND_LENGTH];
-size_t len;
+char command[BUF_SIZE];
 pid_t pid;
-char *args[2];
 int status;
 
-while (1) {
+while(1)
+{
 display_prompt();
 
-if (fgets(command, MAX_COMMAND_LENGTH, stdin) == NULL) {
+if(fgets(command, BUF_SIZE, stdin) == NULL)
+{
+if(feof(stdin))
+{
 printf("\n");
+return(0);
+}
+else
+{
+perror("fgets");
+continue;
+}
+}
+
+if(command[strlen(command)-1] == '\n')
+{
+command[strlen(command)-1] = '\0';
+}
+
+if(strlen(command) == 0)
+{
 continue;
 }
 
-len = strlen(command);
-if (len > 0 && command[len - 1] == '\n') {
-command[len - 1] = '\0';
-}
-
 pid = fork();
-if (pid == -1) {
+if(pid == -1)
+{
 perror("fork");
-exit(EXIT_FAILURE);
+continue;
 }
 
-if (pid == 0) {
-args[0] = command;
-args[1] = NULL;
-if (execve(command, args, NULL) == -1) {
-perror("execve");
+if(pid == 0)
+{
+if(execve(command, NULL, environ) == -1)
+{
+printf("%s: No such file or directory\n", command);
 exit(EXIT_FAILURE);
 }
-} else {
+}
+else
+{
 waitpid(pid, &status, 0);
 
-if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE) {
-printf("Command execution failed\n");
+if(WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
+{
+printf("%s: No such file or directory\n", command);
 }
 }
 }
