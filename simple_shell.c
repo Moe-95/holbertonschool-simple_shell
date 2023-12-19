@@ -6,17 +6,6 @@
 
 #define MAX_COMMAND_LENGTH 100
 
-/**
- * display_prompt - Displays the shell prompt.
- */
-void display_prompt(void);
-
-/**
- * main - The main function for the simple shell.
- *
- * Return: Always 0.
- */
-int main(void);
 
 /**
  * display_prompt - Displays the shell prompt.
@@ -35,6 +24,9 @@ int main(void)
 {
 char command[MAX_COMMAND_LENGTH];
 size_t len;
+pid_t pid;
+char *args[2];
+int status;
 
 while (1)
 {
@@ -51,7 +43,7 @@ if (len > 0 && command[len - 1] == '\n')
 command[len - 1] = '\0';
 }
 
-pid_t pid = fork();
+pid = fork();
 if (pid == -1)
 {
 perror("fork");
@@ -60,7 +52,8 @@ exit(EXIT_FAILURE);
 
 if (pid == 0)
 {
-char *args[] = {command, NULL};
+args[0] = command;
+args[1] = NULL;
 if (execve(command, args, NULL) == -1)
 {
 perror("execve");
@@ -69,7 +62,6 @@ exit(EXIT_FAILURE);
 }
 else
 {
-int status;
 waitpid(pid, &status, 0);
 
 if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
