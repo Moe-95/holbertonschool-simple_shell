@@ -8,6 +8,7 @@
 
 void display_prompt(void);
 void execute_command(char *command);
+
 /**
  * display_prompt - Displays the shell prompt
  */
@@ -16,6 +17,7 @@ void display_prompt(void)
 printf("#cisfun$ ");
 fflush(stdout);
 }
+
 /**
  * main - Entry point of the program
  *
@@ -76,8 +78,6 @@ printf("%s: No such file or directory\n", command);
 
 return (0);
 }
-
-
 
 /**
  * execute_command - Executes the given command using execve
