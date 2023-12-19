@@ -28,8 +28,7 @@ int main(void)
 char command[BUF_SIZE];
 pid_t pid;
 int status;
-char *empty_args[] = {};
-execve(command, empty_args, NULL);
+char *empty_args[1] = {NULL};
 while(1)
 {
 display_prompt();
@@ -67,7 +66,7 @@ continue;
 
 if(pid == 0)
 {
-if(execve(command, NULL, NULL) == -1)
+if(execve(command, empty_args, NULL) == -1)
 {
 printf("%s: No such file or directory\n", command);
 exit(EXIT_FAILURE);
