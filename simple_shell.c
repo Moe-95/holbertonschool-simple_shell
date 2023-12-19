@@ -23,65 +23,48 @@ void display_prompt(void)
 printf("#cisfun$ ");
 }
 
-int main(void)
-{
+int main(void){
 char command[BUF_SIZE];
 pid_t pid;
 int status;
 char *empty_args[1] = {NULL};
-while(1)
-{
+
+while (1) {
 display_prompt();
 
-if(fgets(command, BUF_SIZE, stdin) == NULL)
-{
-if(feof(stdin))
-{
+if (fgets(command, BUF_SIZE, stdin) == NULL) {
+if (feof(stdin)) {
 printf("\n");
 break;
-}
-else
-{
+} else {
 perror("fgets");
 continue;
 }
+
 }
 
-if(command[strlen(command)-1] == '\n')
-{
-command[strlen(command)-1] = '\0';
-}
+command[strcspn(command, "\n")] = '\0';
 
-if(strlen(command) == 0)
-{
+if (strlen(command) == 0) {
 continue;
 }
 
 pid = fork();
-if(pid == -1)
-{
+if (pid == -1) {
 perror("fork");
 continue;
-}
-
-if(pid == 0)
-{
+} else if (pid == 0) {
 execve(command, empty_args, NULL);
-{
-printf("%s: No such file or directory\n", command);
+perror("execve");
 exit(EXIT_FAILURE);
-}
-}
-else
-{
+} else {
 waitpid(pid, &status, 0);
 
-if(WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE)
-{
+if (WIFEXITED(status) && WEXITSTATUS(status) == EXIT_FAILURE) {
 printf("%s: No such file or directory\n", command);
 }
 }
 }
 
-return(0);
+return (0);
 }
