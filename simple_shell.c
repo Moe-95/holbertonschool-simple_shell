@@ -28,24 +28,24 @@ void execute_command(char *command, char **path_array)
 {
 char **args;
 int i;
-
-/* Allocate memory for args array */
 args = malloc((3 + 1) * sizeof(char *));
 if (args == NULL)
 {
 perror("malloc");
 exit(EXIT_FAILURE);
 }
-
-args[0] = "/bin/sh";
+args[0] = malloc(BUF_SIZE);
+if (args[0] == NULL)
+{
+perror("malloc");
+exit(EXIT_FAILURE);
+}
 args[1] = "-c";
 args[2] = command;
 args[3] = NULL;
 
 if (isatty(STDIN_FILENO))
 display_prompt();
-
-/* Search for the command in each directory specified by the PATH */
 for (i = 0; path_array[i] != NULL; i++)
 {
 snprintf(args[0], BUF_SIZE, "%s/%s", path_array[i], command);
@@ -54,6 +54,7 @@ execve(args[0], args, NULL);
 }
 
 perror("execve");
+free(args[0]);
 exit(EXIT_FAILURE);
 }
 
