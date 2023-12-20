@@ -28,6 +28,7 @@ void execute_command(char *command, char **path_array)
 {
 char **args = NULL;
 int i;
+
 args = malloc(4 * sizeof(char *));
 if (args == NULL)
 {
@@ -35,7 +36,7 @@ perror("malloc");
 exit(EXIT_FAILURE);
 }
 
-args[0] = malloc(BUF_SIZE);
+args[0] = malloc(BUF_SIZE + strlen(command) + 2);  // +2 for '/' and null terminator
 if (args[0] == NULL)
 {
 perror("malloc");
@@ -52,7 +53,7 @@ display_prompt();
 
 for (i = 0; path_array[i] != NULL; i++)
 {
-snprintf(args[0], BUF_SIZE, "%s/%s", path_array[i], command);
+snprintf(args[0], BUF_SIZE + strlen(command) + 2, "%s/%s", path_array[i], command);
 
 if (access(args[0], F_OK | X_OK) == 0)
 {
@@ -67,7 +68,6 @@ exit(EXIT_FAILURE);
 fprintf(stderr, "%s: command not found\n", command);
 
 free(args[0]);
-
 free(args);
 
 exit(EXIT_FAILURE);
