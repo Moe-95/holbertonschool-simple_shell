@@ -15,9 +15,9 @@ void execute_command(char *command);
 void display_prompt(void)
 {
 if (isatty(STDIN_FILENO))
-printf("#cisfun$ ");
+write(STDOUT_FILENO, "#cisfun$ ", 9);
 else
-return;
+write(STDOUT_FILENO, "$ ", 2);
 fflush(stdout);
 }
 
