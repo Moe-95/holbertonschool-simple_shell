@@ -85,7 +85,6 @@ return (0);
  */
 void execute_command(char *command)
 {
-size_t command_length = strlen(command);
 char *args[4];
 
 args[0] = "/bin/sh";
