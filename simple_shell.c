@@ -14,6 +14,8 @@ void execute_command(char *command);
  */
 void display_prompt(void)
 {
+if (!isatty(STDIN_FILENO))
+return;
 printf("#cisfun$ ");
 fflush(stdout);
 }
@@ -32,7 +34,6 @@ int status;
 while (1)
 {
 display_prompt();
-
 if (fgets(command, BUF_SIZE, stdin) == NULL)
 {
 if (feof(stdin))
