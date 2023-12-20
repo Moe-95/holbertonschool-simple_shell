@@ -14,8 +14,7 @@ void execute_command(char *command);
  */
 void display_prompt(void)
 {
-if (!isatty(STDIN_FILENO))
-return;
+if (isatty(STDIN_FILENO))
 printf("#cisfun$ ");
 fflush(stdout);
 }
