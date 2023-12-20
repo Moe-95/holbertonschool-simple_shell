@@ -19,6 +19,10 @@ if (isatty(STDIN_FILENO))
 write(STDOUT_FILENO, "#cisfun$ ", 9);
 fflush(stdout);
 }
+else
+{
+write(STDOUT_FILENO, "\n", 1);
+}
 }
 /**
  * main - Entry point of the program
