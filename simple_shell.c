@@ -26,14 +26,15 @@ fflush(stdout);
  */
 void execute_command(char *command, char **path_array)
 {
-char **args;
+char **args = NULL;
 int i;
-args = malloc((3 + 1) * sizeof(char *));
+args = malloc(4 * sizeof(char *));
 if (args == NULL)
 {
 perror("malloc");
 exit(EXIT_FAILURE);
 }
+
 args[0] = malloc(BUF_SIZE);
 if (args[0] == NULL)
 {
@@ -41,22 +42,34 @@ perror("malloc");
 free(args);
 exit(EXIT_FAILURE);
 }
+
 args[1] = "-c";
 args[2] = command;
 args[3] = NULL;
 
 if (isatty(STDIN_FILENO))
 display_prompt();
+
 for (i = 0; path_array[i] != NULL; i++)
 {
 snprintf(args[0], BUF_SIZE, "%s/%s", path_array[i], command);
 
+if (access(args[0], F_OK | X_OK) == 0)
+{
 execve(args[0], args, NULL);
-}
-
 perror("execve");
 free(args[0]);
 free(args);
+exit(EXIT_FAILURE);
+}
+}
+
+fprintf(stderr, "%s: command not found\n", command);
+
+free(args[0]);
+
+free(args);
+
 exit(EXIT_FAILURE);
 }
 
