@@ -19,10 +19,6 @@ if (isatty(STDIN_FILENO))
 write(STDOUT_FILENO, "#cisfun$ ", 9);
 fflush(stdout);
 }
-else
-{
-fprintf(stderr, " ");
-}
 }
 /**
  * main - Entry point of the program
@@ -107,6 +103,6 @@ strcpy(args[2], command);
 
 execve("/bin/sh", args, NULL);
 
-perror("execve");
+perror("");
 exit(EXIT_FAILURE);
 }
