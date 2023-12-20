@@ -38,7 +38,6 @@ if (fgets(command, BUF_SIZE, stdin) == NULL)
 {
 if (feof(stdin))
 {
-printf("\n");
 break;
 }
 else
@@ -103,6 +102,6 @@ strcpy(args[2], command);
 
 execve("/bin/sh", args, NULL);
 
-perror("");
+perror("execve");
 exit(EXIT_FAILURE);
 }
