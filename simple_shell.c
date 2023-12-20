@@ -41,7 +41,7 @@ perror("malloc");
 exit(EXIT_FAILURE);
 }
 
-args[0] = malloc(BUF_SIZE + strlen(command) + 2); /* +2 for '/' and null terminator */
+args[0] = malloc(BUF_SIZE + strlen(command) + 2);
 if (args[0] == NULL)
 {
 perror("malloc");
@@ -56,7 +56,6 @@ args[3] = NULL;
 if (isatty(STDIN_FILENO))
 display_prompt();
 
-// Check if the command has a '/' indicating a path
 if (strchr(command, '/') != NULL)
 {
 execve(command, args, NULL);
