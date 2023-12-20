@@ -85,8 +85,23 @@ return (0);
  */
 void execute_command(char *command)
 {
-char *args[] = {"/bin/sh", "-c", command, NULL};
+size_t command_length = strlen(command);
+char *args[4];
+
+args[0] = "/bin/sh";
+args[1] = "-c";
+args[2] = malloc(command_length + 1);
+args[3] = NULL;
+if (args[2] == NULL)
+{
+perror("malloc");
+exit(EXIT_FAILURE);
+}
+
+strcpy(args[2], command);
+
 execve("/bin/sh", args, NULL);
+
 perror("execve");
 exit(EXIT_FAILURE);
 }
