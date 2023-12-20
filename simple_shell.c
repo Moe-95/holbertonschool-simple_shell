@@ -1,13 +1,11 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<unistd.h>
-#include<sys/wait.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 #define BUF_SIZE 100
-
-void display_prompt(void);
-void execute_command(char *command);
+#define PATH_DELIMITER ":"
 
 /**
  * display_prompt - Displays the shell prompt
@@ -20,6 +18,101 @@ write(STDOUT_FILENO, "#cisfun$ ", 9);
 fflush(stdout);
 }
 }
+
+/**
+ * execute_command - Executes the given command using execve
+ * @command: The command to be executed
+ * @path_array: Array of strings containing directories in the PATH
+ */
+void execute_command(char *command, char **path_array)
+{
+char **args;
+int i;
+
+/* Allocate memory for args array */
+args = malloc((3 + 1) * sizeof(char *));
+if (args == NULL)
+{
+perror("malloc");
+exit(EXIT_FAILURE);
+}
+
+args[0] = "/bin/sh";
+args[1] = "-c";
+args[2] = command;
+args[3] = NULL;
+
+if (isatty(STDIN_FILENO))
+display_prompt();
+
+/* Search for the command in each directory specified by the PATH */
+for (i = 0; path_array[i] != NULL; i++)
+{
+snprintf(args[0], BUF_SIZE, "%s/%s", path_array[i], command);
+
+execve(args[0], args, NULL);
+}
+
+perror("execve");
+exit(EXIT_FAILURE);
+}
+
+/**
+ * get_path - Retrieves the PATH environment variable and returns it as an array of strings
+ *
+ * Return: An array of strings containing the directories in the PATH, or NULL on failure
+ */
+char **get_path(void)
+{
+char *path_env = getenv("PATH");
+char *path_copy, *token;
+char **path_array;
+int count = 0;
+
+if (path_env == NULL)
+{
+perror("getenv");
+return (NULL);
+}
+
+path_copy = strdup(path_env);
+if (path_copy == NULL)
+{
+perror("strdup");
+return (NULL);
+}
+
+token = strtok(path_copy, PATH_DELIMITER);
+while (token != NULL)
+{
+count++;
+token = strtok(NULL, PATH_DELIMITER);
+}
+
+path_array = malloc((count + 1) * sizeof(char *));
+if (path_array == NULL)
+{
+perror("malloc");
+free(path_copy);
+return (NULL);
+}
+
+count = 0;
+token = strtok(path_env, PATH_DELIMITER);
+while (token != NULL)
+{
+path_array[count] = token;
+count++;
+token = strtok(NULL, PATH_DELIMITER);
+}
+
+path_array[count] = NULL;
+
+free(path_copy);
+
+return (path_array);
+}
+
 /**
  * main - Entry point of the program
  *
@@ -30,10 +123,12 @@ int main(void)
 char command[BUF_SIZE];
 pid_t pid;
 int status;
+char **path_array = get_path();
 
 while (1)
 {
 display_prompt();
+
 if (fgets(command, BUF_SIZE, stdin) == NULL)
 {
 if (feof(stdin))
@@ -62,7 +157,7 @@ continue;
 }
 else if (pid == 0)
 {
-execute_command(command);
+execute_command(command, path_array);
 exit(EXIT_FAILURE);
 }
 else
@@ -76,24 +171,7 @@ printf("%s: No such file or directory\n", command);
 }
 }
 
+free(path_array);
+
 return (0);
-}
-
-/**
- * execute_command - Executes the given command using execve
- * @command: The command to be executed
- */
-void execute_command(char *command)
-{
-char *args[4];
-
-args[0] = "/bin/sh";
-args[1] = "-c";
-args[2] = command;
-args[3] = NULL;
-if (isatty(STDIN_FILENO))
-display_prompt();
-execve(args[0], args, NULL);
-perror("execve");
-exit(EXIT_FAILURE);
 }
