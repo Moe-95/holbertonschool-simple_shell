@@ -23,11 +23,8 @@ fflush(stdout);
  * execute_command - Executes the given command using execve
  * @command: The command to be executed
  * @path_array: Array of strings containing directories in the PATH
- */
-/**
- * execute_command - Executes the given command using execve
- * @command: The command to be executed
- * @path_array: Array of strings containing directories in the PATH
+ *
+ * Return: No return value
  */
 void execute_command(char *command, char **path_array)
 {
