@@ -24,6 +24,11 @@ fflush(stdout);
  * @command: The command to be executed
  * @path_array: Array of strings containing directories in the PATH
  */
+/**
+ * execute_command - Executes the given command using execve
+ * @command: The command to be executed
+ * @path_array: Array of strings containing directories in the PATH
+ */
 void execute_command(char *command, char **path_array)
 {
 char **args = NULL;
@@ -36,7 +41,7 @@ perror("malloc");
 exit(EXIT_FAILURE);
 }
 
-args[0] = malloc(BUF_SIZE + strlen(command) + 2);
+args[0] = malloc(BUF_SIZE + strlen(command) + 2); /* +2 for '/' and null terminator */
 if (args[0] == NULL)
 {
 perror("malloc");
@@ -50,6 +55,16 @@ args[3] = NULL;
 
 if (isatty(STDIN_FILENO))
 display_prompt();
+
+// Check if the command has a '/' indicating a path
+if (strchr(command, '/') != NULL)
+{
+execve(command, args, NULL);
+perror("execve");
+free(args[0]);
+free(args);
+exit(EXIT_FAILURE);
+}
 
 for (i = 0; path_array[i] != NULL; i++)
 {
