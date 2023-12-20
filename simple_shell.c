@@ -16,6 +16,9 @@ void display_prompt(void)
 {
 if (isatty(STDIN_FILENO))
 printf("#cisfun$ ");
+else
+break;
+fflush(stdout);
 }
 
 /**
