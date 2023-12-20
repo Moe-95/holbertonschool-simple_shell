@@ -21,7 +21,7 @@ fflush(stdout);
 }
 else
 {
-write(STDOUT_FILENO, "\n", 1);
+fprintf(stderr, " ");
 }
 }
 /**
