@@ -90,11 +90,11 @@ char *args[4];
 
 args[0] = "/bin/sh";
 args[1] = "-c";
-args[2] = malloc(command_length + 1);
+args[2] = command;
 args[3] = NULL;
 if (isatty(STDIN_FILENO))
 display_prompt();
-execve("/bin/sh", args, NULL);
+execve(args[0], args, NULL);
 perror("execve");
 exit(EXIT_FAILURE);
 }
