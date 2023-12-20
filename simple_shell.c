@@ -38,6 +38,7 @@ args[0] = malloc(BUF_SIZE);
 if (args[0] == NULL)
 {
 perror("malloc");
+free(args);
 exit(EXIT_FAILURE);
 }
 args[1] = "-c";
@@ -55,6 +56,7 @@ execve(args[0], args, NULL);
 
 perror("execve");
 free(args[0]);
+free(args);
 exit(EXIT_FAILURE);
 }
 
