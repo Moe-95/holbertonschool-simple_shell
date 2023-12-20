@@ -36,7 +36,7 @@ perror("malloc");
 exit(EXIT_FAILURE);
 }
 
-args[0] = malloc(BUF_SIZE + strlen(command) + 2);  // +2 for '/' and null terminator
+args[0] = malloc(BUF_SIZE + strlen(command) + 2);
 if (args[0] == NULL)
 {
 perror("malloc");
