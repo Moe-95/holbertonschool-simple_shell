@@ -23,8 +23,7 @@ fflush(stdout);
 
 void execute_command(char *command, char **path_array)
 {
-pid_t pid;
-int i, status;
+int i;
 char **args = malloc(BUF_SIZE * sizeof(char *));
 if(args == NULL)
 {
