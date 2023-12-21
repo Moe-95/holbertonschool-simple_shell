@@ -48,7 +48,7 @@ void execute_command(char *command, char **path_array)
         display_prompt();
     }
 
-    if (args[0] == NULL)
+    if (args[0] == NULL || args[0][0] == '\0')
     {
         free(args);
         return;
