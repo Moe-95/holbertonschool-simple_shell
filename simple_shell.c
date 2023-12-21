@@ -37,13 +37,22 @@ void execute_command(char *command, char **path_array)
         exit(EXIT_FAILURE);
     }
 
-    args[0] = strtok(command, " ");
+    args[0] = strtok(command, " \t\n");
+    printf("Command: %s\n", args[0]);  // Print command
+
     for (i = 1; i < BUF_SIZE; i++)
     {
-        args[i] = strtok(NULL, " ");
+        args[i] = strtok(NULL, " \t\n");
         if (args[i] == NULL)
             break;
     }
+
+    printf("Arguments: ");
+    for (int j = 0; j < i; j++)
+    {
+        printf("%s ", args[j]);  // Print arguments
+    }
+    printf("\n");
 
     if (isatty(STDIN_FILENO))
     {
