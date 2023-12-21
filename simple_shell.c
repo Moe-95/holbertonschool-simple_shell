@@ -63,7 +63,6 @@ void execute_command(char *command, char **path_array)
 
     if (strcmp(args[0], "cd") == 0)
     {
-        // Handle 'cd' command separately
         if (args[1] != NULL)
         {
             if (chdir(args[1]) != 0)
@@ -101,7 +100,6 @@ void execute_command(char *command, char **path_array)
     free(args);
     exit(EXIT_FAILURE);
 }
-
 
 
 
