@@ -351,6 +351,34 @@ int check_path(char *path)
 	return ((stat(path, &buff) == 0));
 } /* End function */
 
+/* get paths from environment variable */
+char **_get_paths(char *env_variable)
+{
+    char *env_paths = _getenv(env_variable);
+    char *path_cpy;
+    char **paths = NULL;
+    int i;
+
+    if (env_paths == NULL)
+        return NULL;
+
+    path_cpy = strdup(env_paths);
+
+    /* Tokenize path */
+    i = 0;
+    paths = malloc(sizeof(char *));
+    paths[i] = strtok(path_cpy, ":");
+
+    while (paths[i] != NULL)
+    {
+        i++;
+        paths = realloc(paths, (i + 1) * sizeof(char *));
+        paths[i] = strtok(NULL, ":");
+    }
+
+    free(path_cpy);
+    return paths;
+}
 
 
 /**
@@ -361,44 +389,45 @@ int check_path(char *path)
  * @path: 'path'
  * Return: full path name if found && 0 if not found.
  */
+/* custom _which function */
 char *_which(char *filename, char *path)
 {
-	char *path_cpy;
-	char *tokens[1024];
-	char *pathname;
-	int i;
+    char *pathname;
+    char **paths;
+    int i;
 
-	if (path == NULL)
-	{
-		return (NULL);
-	} /* End if */
-	path_cpy = strdup(path);
+    if (path == NULL)
+        return NULL;
 
-	/* Tokenize path */
-	i = 0;
-	tokens[i] = strtok(path_cpy, ":");
+    /* First, try to get paths from PATH1, then fallback to PATH */
+    paths = _get_paths("PATH1");
+    if (paths == NULL || paths[0] == NULL)
+        paths = _get_paths("PATH");
 
-	while (tokens[i] != NULL)
-	{
-		pathname = malloc(strlen(tokens[i]) + strlen(filename) + 2);
-		_strcpy(pathname, tokens[i]);
-		_strcat(pathname, "/");
-		_strcat(pathname, filename);
+    /* If no paths are found, return NULL */
+    if (paths == NULL || paths[0] == NULL)
+        return NULL;
 
-		if (check_path(pathname))
-		{
-			free(path_cpy);
-			return (pathname);
-		}
+    /* Iterate through the paths */
+    for (i = 0; paths[i] != NULL; i++)
+    {
+        pathname = malloc(strlen(paths[i]) + strlen(filename) + 2);
+        _strcpy(pathname, paths[i]);
+        _strcat(pathname, "/");
+        _strcat(pathname, filename);
 
-		free(pathname);
-		i++;
-		tokens[i] = strtok(NULL, ":");
-	} /* end while */
+        if (check_path(pathname))
+        {
+            free(paths);
+            return pathname;
+        }
 
-	free(path_cpy);
-	return (NULL);
-} /* end function */
+        free(pathname);
+    }
+
+    free(paths);
+    return NULL;
+}
 
 /**
  * _strncmp - compare n character of str1 and str2
