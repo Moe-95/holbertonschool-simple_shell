@@ -645,7 +645,6 @@ int check_builtins(int cnt, char **tokens, int *exit_status, char **argv)
         return 2;
     }
 
-    // If not a built-in command, return 0
     return 0;
 }
 
