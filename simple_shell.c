@@ -660,7 +660,6 @@ int _ch(char **argv, char **tokens, char **fullpath, int *exit_status)
 
     if (tokens[0] == NULL)
     {
-        // Handle case where command is not provided
         write(STDERR_FILENO, "No command provided\n", 20);
         *exit_status = 2;
         return 2;
@@ -670,7 +669,6 @@ int _ch(char **argv, char **tokens, char **fullpath, int *exit_status)
 
     if (*fullpath == NULL || access(*fullpath, X_OK) == -1)
     {
-        // Handle case where command is not found or not executable
         write(STDERR_FILENO, argv[0], strlen(argv[0]));
         write(STDERR_FILENO, ": 1: ", 5);
         write(STDERR_FILENO, tokens[0], strlen(tokens[0]));
