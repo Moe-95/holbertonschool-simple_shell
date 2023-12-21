@@ -78,8 +78,7 @@ int hsh_exit(char **args, int *exit_status) {
 int hsh_env(char **args, int *exit_status) {
     (void)args; /* Unused parameter */
 
-    char **env_var;
-    env_var = environ;
+    char **env_var = environ;
     while (*env_var != NULL) {
         printf("%s\n", *env_var);
         env_var++;
