@@ -26,6 +26,13 @@ fflush(stdout);
  *
  * Return: No return value
  */
+/**
+ * execute_command - Executes the given command using execve
+ * @command: The command to be executed
+ * @path_array: Array of strings containing directories in the PATH
+ *
+ * Return: No return value
+ */
 void execute_command(char *command, char **path_array)
 {
     int i;
@@ -50,6 +57,20 @@ void execute_command(char *command, char **path_array)
 
     if (args[0] == NULL || args[0][0] == '\0')
     {
+        free(args);
+        return;
+    }
+
+    if (strcmp(args[0], "cd") == 0)
+    {
+        // Handle 'cd' command separately
+        if (args[1] != NULL)
+        {
+            if (chdir(args[1]) != 0)
+            {
+                perror("chdir");
+            }
+        }
         free(args);
         return;
     }
@@ -80,6 +101,7 @@ void execute_command(char *command, char **path_array)
     free(args);
     exit(EXIT_FAILURE);
 }
+
 
 
 
