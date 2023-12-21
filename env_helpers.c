@@ -150,7 +150,6 @@ char *_which(char *filename, char *path)
  */
 int check_path(char *path)
 {
-	struct stat buff;
-
-	return ((stat(path, &buff) == 0));
-} /* End function */
+struct stat buff;
+return ((stat(path, &buff) == 0));
+}
