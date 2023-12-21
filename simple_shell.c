@@ -70,31 +70,38 @@ char *validate_input(void) {
 }
 
 int hsh_exit(char **args, int *exit_status) {
-    (void)args;
+    (void)args; // Unused parameter
     *exit_status = 0;
     return 0;
 }
 
 int hsh_env(char **args, int *exit_status) {
-    (void)args;
-    (void)exit_status;
+    (void)args; // Unused parameter
+
+    char **env_var = environ;
+    while (*env_var != NULL) {
+        printf("%s\n", *env_var);
+        env_var++;
+    }
+
+    *exit_status = 0;
     return 1;
 }
 
 int hsh_cd(char **args, int *exit_status) {
-    (void)args;
+    (void)args; // Unused parameter
     (void)exit_status;
     return 1;
 }
 
 int hsh_setenv(char **args, int *exit_status) {
-    (void)args;
+    (void)args; // Unused parameter
     (void)exit_status;
     return 1;
 }
 
 int hsh_unsetenv(char **args, int *exit_status) {
-    (void)args;
+    (void)args; // Unused parameter
     (void)exit_status;
     return 1;
 }
@@ -102,16 +109,15 @@ int hsh_unsetenv(char **args, int *exit_status) {
 int hsh_execute(char **arguments, int *exit_status) {
     pid_t pid;
     int status;
-    char *new_arguments;
 
-    new_arguments = validate_input();
+    char *new_arguments = validate_input();
     if (strcmp(new_arguments, "Fail access") == 0)
         return 1;
 
     pid = fork();
     if (pid == 0) {
-        if (execve(new_arguments, arguments, environ) == -1) {
-            perror("execve fail");
+        if (execvp(arguments[0], arguments) == -1) {
+            perror("execvp fail");
             exit(EXIT_FAILURE);
         }
     } else if (pid < 0) {
@@ -126,7 +132,6 @@ int hsh_execute(char **arguments, int *exit_status) {
             free(new_arguments);
         return 1;
     }
-    return 1;
 }
 
 int hsh_execute_builtins(char **args, int *exit_status) {
