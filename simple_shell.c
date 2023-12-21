@@ -399,7 +399,6 @@ char *_which(char *filename, char *path)
 
     free(path_cpy);
 
-    // If PATH1 is set, check it as well
     char *path1 = _getenv("PATH1");
     if (path1 != NULL)
     {
