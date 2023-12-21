@@ -362,18 +362,40 @@ int check_path(char *path)
  * Return: full path name if found && 0 if not found.
  */
 /* custom _which function */
+/**
+ * _which - Entry point
+ * Description: Find the full path name
+ *
+ * @filename: File name
+ * @path: PATH environment variable
+ * Return: Full path name if found, NULL if not found.
+ */
 char *_which(char *filename, char *path)
 {
+    char *path1 = _getenv("PATH1");
     char *path_cpy;
     char *tokens[1024];
     char *pathname;
     int i;
 
+    if (path == NULL && path1 == NULL)
+    {
+        return NULL;
+    }
+
     if (path == NULL)
     {
-        return (NULL);
-    } /* End if */
-    path_cpy = strdup(path);
+        path_cpy = strdup(path1);
+    }
+    else
+    {
+        path_cpy = strdup(path);
+    }
+
+    if (path_cpy == NULL)
+    {
+        return NULL;
+    }
 
     /* Tokenize path */
     i = 0;
@@ -389,46 +411,18 @@ char *_which(char *filename, char *path)
         if (check_path(pathname))
         {
             free(path_cpy);
-            return (pathname);
+            return pathname;
         }
 
         free(pathname);
         i++;
         tokens[i] = strtok(NULL, ":");
-    } /* end while */
-
-    free(path_cpy);
-
-    char *path1 = _getenv("PATH1");
-    if (path1 != NULL)
-    {
-        path_cpy = strdup(path1);
-        i = 0;
-        tokens[i] = strtok(path_cpy, ":");
-
-        while (tokens[i] != NULL)
-        {
-            pathname = malloc(strlen(tokens[i]) + strlen(filename) + 2);
-            _strcpy(pathname, tokens[i]);
-            _strcat(pathname, "/");
-            _strcat(pathname, filename);
-
-            if (check_path(pathname))
-            {
-                free(path_cpy);
-                return (pathname);
-            }
-
-            free(pathname);
-            i++;
-            tokens[i] = strtok(NULL, ":");
-        } /* end while */
-
-        free(path_cpy);
     }
 
-    return (NULL);
+    free(path_cpy);
+    return NULL;
 }
+
 
 /**
  * _strncmp - compare n character of str1 and str2
