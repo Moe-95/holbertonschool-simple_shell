@@ -38,7 +38,7 @@ void execute_command(char *command, char **path_array)
     }
 
     args[0] = strtok(command, " \t\n");
-    printf("Command: %s\n", args[0]);  // Print command
+    printf("Command: %s\n", args[0]);
 
     for (i = 1; i < BUF_SIZE; i++)
     {
@@ -50,8 +50,7 @@ void execute_command(char *command, char **path_array)
     printf("Arguments: ");
     for (int j = 0; j < i; j++)
     {
-        printf("%s ", args[j]);  // Print arguments
-    }
+        printf("%s ", args[j]);
     printf("\n");
 
     if (isatty(STDIN_FILENO))
