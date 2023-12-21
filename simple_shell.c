@@ -11,8 +11,50 @@ extern char **environ;
 
 typedef struct {
     char *name_builtin;
-    int (*func_builtin)(char **args, char *input_stdin, int *exit_status);
+    int (*func_builtin)(char **args, int *exit_status);
 } choose_builtins_t;
+
+void display_prompt(void);
+
+char *validate_input(char **arguments, char **argv);
+
+int hsh_exit(char **args, int *exit_status);
+
+int hsh_env(char **args, int *exit_status);
+
+int hsh_cd(char **args, int *exit_status);
+
+int hsh_setenv(char **args, int *exit_status);
+
+int hsh_unsetenv(char **args, int *exit_status);
+
+int hsh_execute(char **arguments, char **argv, int *exit_status);
+
+int hsh_execute_builtins(char **args, char *input_stdin,
+                         char **argv, int *exit_status);
+
+int main(int argc, char **argv);
+
+int main(int argc, char **argv) {
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t read;
+    int exit_status = 0;
+
+    while (1) {
+        display_prompt();
+        read = getline(&line, &len, stdin);
+        if (read == -1) {
+            perror("getline");
+            exit(EXIT_FAILURE);
+        }
+
+        hsh_execute_builtins(tokens, line, argv, &exit_status);
+    }
+
+    free(line);
+    return exit_status;
+}
 
 void display_prompt(void) {
     if (isatty(STDIN_FILENO)) {
@@ -21,24 +63,28 @@ void display_prompt(void) {
     }
 }
 
-int hsh_exit(char **args, char *input_stdin, int *exit_status) {
+char *validate_input(char **arguments, char **argv) {
+    return strdup("/bin/ls");
+}
+
+int hsh_exit(char **args, int *exit_status) {
     *exit_status = 0;
     return 0;
 }
 
-int hsh_env(char **args, char *input_stdin, int *exit_status) {
+int hsh_env(char **args, int *exit_status) {
     return 1;
 }
 
-int hsh_cd(char **args, char *input_stdin, int *exit_status) {
+int hsh_cd(char **args, int *exit_status) {
     return 1;
 }
 
-int hsh_setenv(char **args, char *input_stdin, int *exit_status) {
+int hsh_setenv(char **args, int *exit_status) {
     return 1;
 }
 
-int hsh_unsetenv(char **args, char *input_stdin, int *exit_status) {
+int hsh_unsetenv(char **args, int *exit_status) {
     return 1;
 }
 
@@ -86,7 +132,7 @@ int hsh_execute_builtins(char **args, char *input_stdin,
 
     while (options[i].name_builtin) {
         if (strcmp(options[i].name_builtin, args[0]) == 0) {
-            return ((int)((*options[i].func_builtin)(args, input_stdin, exit_status)));
+            return ((int)((*options[i].func_builtin)(args, exit_status)));
         }
         i++;
     }
