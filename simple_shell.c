@@ -37,16 +37,21 @@ void execute_command(char *command, char **path_array)
     }
 
     args[0] = strtok(command, " ");
-    for (i = 1; i < BUF_SIZE; i++)
+    for (i = 1; i < BUF_SIZE && args[i - 1] != NULL; i++)
     {
         args[i] = strtok(NULL, " ");
-        if (args[i] == NULL)
-            break;
     }
+    args[i] = NULL;
 
     if (isatty(STDIN_FILENO))
     {
         display_prompt();
+    }
+
+    if (args[0] == NULL)
+    {
+        free(args);
+        return;
     }
 
     if (strchr(args[0], '/') != NULL)
@@ -75,6 +80,7 @@ void execute_command(char *command, char **path_array)
     free(args);
     exit(EXIT_FAILURE);
 }
+
 
 
 /**
