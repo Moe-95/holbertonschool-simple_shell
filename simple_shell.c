@@ -84,6 +84,7 @@ void execute_command(char *command, char **path_array)
     free(args);
     exit(EXIT_FAILURE);
 }
+}
 
 /**
  * get_path - Retrieves the PATH environment variable and returns it as an array of strings
