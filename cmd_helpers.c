@@ -200,5 +200,5 @@ break;
 }
 }
 
-return (is_positive * result);
+return (is_positive *result);
 }

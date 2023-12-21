@@ -56,25 +56,20 @@ ssize_t bytes_read = 0;
 size_t index = 0;
 ssize_t result;
 char *newSizePtr;
-
 while (1)
 {
 if (index > *buff_size)
 {
 *buff_size += 8;
 newSizePtr = _realloc(*linePtr, *buff_size);
-
 if (newSizePtr == NULL)
 {
 perror("Memory allocation error");
 return (-1);
 }
-
 *linePtr = newSizePtr;
 }
-
 result = read(fileno(my_file), &((*linePtr)[index]), 1);
-
 if (result == -1)
 {
 perror("Error reading file");
@@ -84,14 +79,10 @@ else if (result == 0)
 {
 break;
 }
-
 bytes_read++;
-
 if ((*linePtr)[index] == '\n')
 break;
-
 index++;
 }
-
 return (bytes_read);
 }

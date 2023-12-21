@@ -3,8 +3,8 @@
  * _strcmp - Compares two strings.
  * @str1: String 1.
  * @str2: String 2.
- * Return: If str1 is lexicographically less than str2, returns a negative integer value.
- * If str1 is lexicographically greater than str2, returns a positive integer value.
+ * Return: If str1 < str2, returns a negative value.
+ * If str1 > str2, returns a positive value.
  * If str1 is lexicographically equal to str2, returns zero.
  */
 int _strcmp(char *str1, char *str2)
