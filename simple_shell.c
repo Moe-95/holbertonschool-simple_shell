@@ -361,44 +361,75 @@ int check_path(char *path)
  * @path: 'path'
  * Return: full path name if found && 0 if not found.
  */
+/* custom _which function */
 char *_which(char *filename, char *path)
 {
-	char *path_cpy;
-	char *tokens[1024];
-	char *pathname;
-	int i;
+    char *path_cpy;
+    char *tokens[1024];
+    char *pathname;
+    int i;
 
-	if (path == NULL)
-	{
-		return (NULL);
-	} /* End if */
-	path_cpy = strdup(path);
+    if (path == NULL)
+    {
+        return (NULL);
+    } /* End if */
+    path_cpy = strdup(path);
 
-	/* Tokenize path */
-	i = 0;
-	tokens[i] = strtok(path_cpy, ":");
+    /* Tokenize path */
+    i = 0;
+    tokens[i] = strtok(path_cpy, ":");
 
-	while (tokens[i] != NULL)
-	{
-		pathname = malloc(strlen(tokens[i]) + strlen(filename) + 2);
-		_strcpy(pathname, tokens[i]);
-		_strcat(pathname, "/");
-		_strcat(pathname, filename);
+    while (tokens[i] != NULL)
+    {
+        pathname = malloc(strlen(tokens[i]) + strlen(filename) + 2);
+        _strcpy(pathname, tokens[i]);
+        _strcat(pathname, "/");
+        _strcat(pathname, filename);
 
-		if (check_path(pathname))
-		{
-			free(path_cpy);
-			return (pathname);
-		}
+        if (check_path(pathname))
+        {
+            free(path_cpy);
+            return (pathname);
+        }
 
-		free(pathname);
-		i++;
-		tokens[i] = strtok(NULL, ":");
-	} /* end while */
+        free(pathname);
+        i++;
+        tokens[i] = strtok(NULL, ":");
+    } /* end while */
 
-	free(path_cpy);
-	return (NULL);
-} /* end function */
+    free(path_cpy);
+
+    // If PATH1 is set, check it as well
+    char *path1 = _getenv("PATH1");
+    if (path1 != NULL)
+    {
+        path_cpy = strdup(path1);
+        i = 0;
+        tokens[i] = strtok(path_cpy, ":");
+
+        while (tokens[i] != NULL)
+        {
+            pathname = malloc(strlen(tokens[i]) + strlen(filename) + 2);
+            _strcpy(pathname, tokens[i]);
+            _strcat(pathname, "/");
+            _strcat(pathname, filename);
+
+            if (check_path(pathname))
+            {
+                free(path_cpy);
+                return (pathname);
+            }
+
+            free(pathname);
+            i++;
+            tokens[i] = strtok(NULL, ":");
+        } /* end while */
+
+        free(path_cpy);
+    }
+
+    return (NULL);
+}
 
 /**
  * _strncmp - compare n character of str1 and str2
