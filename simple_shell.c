@@ -47,6 +47,13 @@ fflush(stdout);
  *
  * Return: No return value
  */
+/**
+ * execute_command - Executes the given command using execve
+ * @command: The command to be executed
+ * @path_array: Array of strings containing directories in the PATH
+ *
+ * Return: No return value
+ */
 void execute_command(char *command, char **path_array)
 {
     int i;
@@ -78,9 +85,9 @@ void execute_command(char *command, char **path_array)
         exit(EXIT_FAILURE);
     }
 
-    char temp[BUF_SIZE];
     for (i = 0; path_array[i] != NULL; i++)
     {
+        char temp[BUF_SIZE];
         snprintf(temp, BUF_SIZE, "%s/%s", path_array[i], args[0]);
 
         if (access(temp, F_OK | X_OK) == 0)
