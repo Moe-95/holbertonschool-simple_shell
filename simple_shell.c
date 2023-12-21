@@ -70,13 +70,13 @@ char *validate_input(void) {
 }
 
 int hsh_exit(char **args, int *exit_status) {
-    (void)args; // Unused parameter
+    (void)args; /* Unused parameter */
     *exit_status = 0;
     return 0;
 }
 
 int hsh_env(char **args, int *exit_status) {
-    (void)args; // Unused parameter
+    (void)args; /* Unused parameter */
 
     char **env_var = environ;
     while (*env_var != NULL) {
@@ -89,19 +89,19 @@ int hsh_env(char **args, int *exit_status) {
 }
 
 int hsh_cd(char **args, int *exit_status) {
-    (void)args; // Unused parameter
+    (void)args; /* Unused parameter */
     (void)exit_status;
     return 1;
 }
 
 int hsh_setenv(char **args, int *exit_status) {
-    (void)args; // Unused parameter
+    (void)args; /* Unused parameter */
     (void)exit_status;
     return 1;
 }
 
 int hsh_unsetenv(char **args, int *exit_status) {
-    (void)args; // Unused parameter
+    (void)args; /* Unused parameter */
     (void)exit_status;
     return 1;
 }
@@ -123,15 +123,15 @@ int hsh_execute(char **arguments, int *exit_status) {
     } else if (pid < 0) {
         perror("Error forking");
         free(new_arguments);
-        return 1;
+        exit_status = 1;
     } else {
         waitpid(-1, &status, 0);
         if (WIFEXITED(status))
             *exit_status = WEXITSTATUS(status);
         if (arguments[0][0] != '/' && arguments[0][0] != '.')
             free(new_arguments);
-        return 1;
     }
+    return 1;
 }
 
 int hsh_execute_builtins(char **args, int *exit_status) {
