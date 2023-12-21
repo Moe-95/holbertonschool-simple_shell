@@ -18,15 +18,15 @@ void display_prompt(void);
 
 char *validate_input(char **arguments, char **argv);
 
-int hsh_exit(int *exit_status);
+int hsh_exit(char **args, int *exit_status);
 
-int hsh_env(int *exit_status);
+int hsh_env(char **args, int *exit_status);
 
-int hsh_cd(int *exit_status);
+int hsh_cd(char **args, int *exit_status);
 
-int hsh_setenv(int *exit_status);
+int hsh_setenv(char **args, int *exit_status);
 
-int hsh_unsetenv(int *exit_status);
+int hsh_unsetenv(char **args, int *exit_status);
 
 int hsh_execute(char **arguments, char **argv, int *exit_status);
 
@@ -69,24 +69,24 @@ char *validate_input(char **arguments, char **argv) {
     return strdup("/bin/ls");
 }
 
-int hsh_exit(int *exit_status) {
+int hsh_exit(char **args, int *exit_status) {
     *exit_status = 0;
     return 0;
 }
 
-int hsh_env(int *exit_status) {
+int hsh_env(char **args, int *exit_status) {
     return 1;
 }
 
-int hsh_cd(int *exit_status) {
+int hsh_cd(char **args, int *exit_status) {
     return 1;
 }
 
-int hsh_setenv(int *exit_status) {
+int hsh_setenv(char **args, int *exit_status) {
     return 1;
 }
 
-int hsh_unsetenv(int *exit_status) {
+int hsh_unsetenv(char **args, int *exit_status) {
     return 1;
 }
 
@@ -133,7 +133,7 @@ int hsh_execute_builtins(char **args, int *exit_status) {
 
     while (options[i].name_builtin) {
         if (strcmp(options[i].name_builtin, args[0]) == 0) {
-            return ((int)((*options[i].func_builtin)(exit_status)));
+            return ((int)((*options[i].func_builtin)(args, exit_status)));
         }
         i++;
     }
