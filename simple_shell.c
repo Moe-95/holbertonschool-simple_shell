@@ -33,13 +33,14 @@ int hsh_execute(char **arguments, char **argv, int *exit_status);
 int hsh_execute_builtins(char **args, char *input_stdin,
                          char **argv, int *exit_status);
 
-int main(int argc, char **argv);
+char **tokenize_input(char *input);
 
 int main(int argc, char **argv) {
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
     int exit_status = 0;
+    char **tokens;
 
     while (1) {
         display_prompt();
@@ -49,7 +50,9 @@ int main(int argc, char **argv) {
             exit(EXIT_FAILURE);
         }
 
+        tokens = tokenize_input(line);
         hsh_execute_builtins(tokens, line, argv, &exit_status);
+        free(tokens);
     }
 
     free(line);
@@ -137,4 +140,24 @@ int hsh_execute_builtins(char **args, char *input_stdin,
         i++;
     }
     return hsh_execute(args, argv, exit_status);
+}
+
+char **tokenize_input(char *input) {
+    char **tokens = malloc(BUF_SIZE * sizeof(char *));
+    char *token;
+    int i = 0;
+
+    if (!tokens) {
+        perror("Allocation error");
+        exit(EXIT_FAILURE);
+    }
+
+    token = strtok(input, " \t\r\n\a");
+    while (token != NULL) {
+        tokens[i++] = token;
+        token = strtok(NULL, " \t\r\n\a");
+    }
+
+    tokens[i] = NULL;
+    return tokens;
 }
