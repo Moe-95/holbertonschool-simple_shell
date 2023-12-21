@@ -19,7 +19,6 @@ fflush(stdout);
 }
 }
 
-
 /**
  * execute_command - Executes the given command using execve
  * @command: The command to be executed
@@ -37,21 +36,13 @@ void execute_command(char *command, char **path_array)
         exit(EXIT_FAILURE);
     }
 
-    args[0] = strtok(command, " \t\n");
-    printf("Command: %s\n", args[0]);
-
+    args[0] = strtok(command, " ");
     for (i = 1; i < BUF_SIZE; i++)
     {
-        args[i] = strtok(NULL, " \t\n");
+        args[i] = strtok(NULL, " ");
         if (args[i] == NULL)
             break;
     }
-
-    printf("Arguments: ");
-    for (int j = 0; j < i; j++)
-    {
-        printf("%s ", args[j]);
-    printf("\n");
 
     if (isatty(STDIN_FILENO))
     {
@@ -84,7 +75,7 @@ void execute_command(char *command, char **path_array)
     free(args);
     exit(EXIT_FAILURE);
 }
-}
+
 
 /**
  * get_path - Retrieves the PATH environment variable and returns it as an array of strings
