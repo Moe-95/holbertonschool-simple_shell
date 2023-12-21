@@ -70,32 +70,32 @@ char *validate_input(void) {
 }
 
 int hsh_exit(char **args, int *exit_status) {
-    (void)args; // Unused parameter
+    (void)args;
     *exit_status = 0;
     return 0;
 }
 
 int hsh_env(char **args, int *exit_status) {
-    (void)args; // Unused parameter
-    (void)exit_status; // Unused parameter
+    (void)args;
+    (void)exit_status;
     return 1;
 }
 
 int hsh_cd(char **args, int *exit_status) {
-    (void)args; // Unused parameter
-    (void)exit_status; // Unused parameter
+    (void)args;
+    (void)exit_status;
     return 1;
 }
 
 int hsh_setenv(char **args, int *exit_status) {
-    (void)args; // Unused parameter
-    (void)exit_status; // Unused parameter
+    (void)args;
+    (void)exit_status;
     return 1;
 }
 
 int hsh_unsetenv(char **args, int *exit_status) {
-    (void)args; // Unused parameter
-    (void)exit_status; // Unused parameter
+    (void)args;
+    (void)exit_status;
     return 1;
 }
 
