@@ -86,12 +86,10 @@ return (0);
 int check_builtins(int cnt, char **tokens, int *exit_status, char **argv)
 {
 char newline = '\n';
-
 if (cnt < 1)
 {
 return (2);
 }
-
 if (_strcmp(tokens[0], "exit") == 0)
 {
 if (tokens[1] != NULL)
@@ -108,30 +106,24 @@ else
 error_message(tokens, argv, exit_status);
 }
 }
-
 return (1);
 }
-
 if (_strcmp(tokens[0], "env") == 0)
 {
 char **env = environ;
-
 while (*env != NULL)
 {
 write(STDOUT_FILENO, *env, _strlen(*env));
 write(STDOUT_FILENO, &newline, 1);
 env++;
 }
-
 return (2);
 }
-
 if (_strcmp(tokens[0], "unsetenv") == 0)
 {
 _unsetenv(tokens[1]);
 return (2);
 }
-
 return (0);
 }
 
@@ -177,34 +169,36 @@ return (2);
 
 return (0);
 }
+/**
+ * _atoi - Converts a string to an integer.
+ * @str: The input string.
+ *
+ * Return: The converted integer.
+ */
 int _atoi(char *str)
 {
-	int result = 0; /* stores converted int */
-	int is_positive = 1; /* track int if it is +ve */
-	int i = 0; /* counter */
+int result = 0;
+int is_positive = 1;
+int i = 0;
 
-	/* check if the char at index 0 is -ve / +ve */
-	if (str[0] == '-')
-	{
-		is_positive = -1;
-		i = 1;
-	} /* End if */
+if (str[0] == '-')
+{
+is_positive = -1;
+i = 1;
+}
 
-	/* Iterate through the loop */
-	while (str[i] != '\0')
-	{
-		/* Validate if the current char is digit */
-		if (str[i] >= '0' && str[i] <= '9')
-		{
-			/* convert to digit and update result */
-			result = result * 10 + (str[i] - '0');
-			i++;
-		} /* end if */
-		else
-		{
-			/* for a non digit char */
-			break;
-		} /* end else */
-	} /* end while */
-	return (is_positive * result);
-} /* ens function */
+while (str[i] != '\0')
+{
+if (str[i] >= '0' && str[i] <= '9')
+{
+result = result * 10 + (str[i] - '0');
+i++;
+}
+else
+{
+break;
+}
+}
+
+return (is_positive * result);
+}
