@@ -109,7 +109,7 @@ void *_realloc(void *ptr, size_t size)
 		dup_size = sizeof(ptr);
 	} /* end else */
 
-	for (; index <= dup_size; index++)
+	for (; index < dup_size; index++)
 	{
 		new_next_ptr[index] = next_ptr[index];
 	} /* end for */
@@ -140,7 +140,7 @@ ssize_t _getline(char **linePtr, size_t *buff_size, FILE *my_file)
 
 	while (1)
 	{
-		if (index >= *buff_size)
+		if (index > *buff_size)
 		{
 			*buff_size += 8;
 			newSizePtr = _realloc(*linePtr, *buff_size);
@@ -389,7 +389,7 @@ char *_which(char *filename, char *path)
 		{
 			free(path_cpy);
 			return (pathname);
-		} /* end if */
+		}
 
 		free(pathname);
 		i++;
