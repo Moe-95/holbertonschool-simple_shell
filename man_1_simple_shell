@@ -1,0 +1,86 @@
+.TH SIMPLE_SHELL "December 2023" "Simple Shell User Manual"
+
+.SH NAME
+simple_shell \- a simple UNIX command line interpreter
+
+.SH SYNOPSIS
+.B simple_shell
+
+.SH DESCRIPTION
+The
+.B simple_shell
+is a basic UNIX command line interpreter that allows users to execute commands. It supports various features to provide a convenient command-line environment.
+
+.SH COMMAND LINE
+.RS
+The command line consists of a prompt that is displayed to the user, waiting for input. A command line always ends with a new line. The prompt is displayed again each time a command has been executed.
+
+The command lines are simple, containing one or more words. It supports command lines with arguments. No semicolons, pipes, redirections, or other advanced features are supported.
+
+.RE
+
+.SH FUNCTIONALITY
+.RS
+The
+.B simple_shell
+provides the following functionality:
+
+.IP "\fB- Display Prompt:\fR"
+Displays a prompt and waits for the user to type a command. The prompt is displayed again after each command execution.
+
+.IP "\fB- Handle Errors:\fR"
+Handles errors gracefully and displays error messages when necessary.
+
+.IP "\fB- Command Execution:\fR"
+Executes commands specified by the user. If an executable cannot be found, an error message is printed, and the prompt is displayed again.
+
+.IP "\fB- End of File Condition:\fR"
+Handles the end of the file condition (Ctrl+D) gracefully.
+
+.IP "\fB- Command Lines with Arguments:\fR"
+Supports command lines with arguments. Arguments are passed to the executed programs.
+
+.IP "\fB- Handle PATH:\fR"
+Handles the PATH environment variable to locate executables.
+
+.IP "\fB- Handle env Built-In:\fR"
+Implements the env built-in command, which prints the current environment.
+
+.IP "\fB- Handle exit Built-In:\fR"
+Implements the exit built-in command, which exits the shell. No arguments are required.
+
+.RE
+
+.SH EXIT STATUS
+.RS
+The
+.B simple_shell
+returns the following exit status:
+
+.IP "\fB0:\fR"
+Successful execution of the command.
+
+.IP "\fB1:\fR"
+General error.
+
+.IP "\fB2:\fR"
+Error in command line arguments.
+
+.IP "\fB127:\fR"
+Command not found.
+
+.RE
+
+.SH BUGS
+.RS
+No known bugs.
+
+.RE
+
+.SH AUTHOR
+.RS
+The
+.B simple_shell
+was created by [Mohamad Karim Fahs].
+
+.RE
