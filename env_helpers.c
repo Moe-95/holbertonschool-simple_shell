@@ -32,7 +32,7 @@ return (NULL);
  * Return: 0 on success, -1 on failure.
  */
 static int _realloc_env(char ***new_arr, char **env, int i,
-int *environ_cnt, int nameLen, char *name)
+int nameLen, char *name)
 {
 while (*env != NULL)
 {
