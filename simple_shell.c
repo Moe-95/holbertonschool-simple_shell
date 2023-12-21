@@ -78,7 +78,8 @@ int hsh_exit(char **args, int *exit_status) {
 int hsh_env(char **args, int *exit_status) {
     (void)args; /* Unused parameter */
 
-    char **env_var = environ;
+    char **env_var;
+    env_var = environ;
     while (*env_var != NULL) {
         printf("%s\n", *env_var);
         env_var++;
@@ -111,8 +112,10 @@ int hsh_execute(char **arguments, int *exit_status) {
     int status;
 
     char *new_arguments = validate_input();
-    if (strcmp(new_arguments, "Fail access") == 0)
+    if (strcmp(new_arguments, "Fail access") == 0) {
+        *exit_status = 1;
         return 1;
+    }
 
     pid = fork();
     if (pid == 0) {
@@ -123,7 +126,7 @@ int hsh_execute(char **arguments, int *exit_status) {
     } else if (pid < 0) {
         perror("Error forking");
         free(new_arguments);
-        exit_status = 1;
+        *exit_status = 1;
     } else {
         waitpid(-1, &status, 0);
         if (WIFEXITED(status))
