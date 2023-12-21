@@ -80,3 +80,63 @@ environ = new_arr;
 
 return (0);
 }
+/**
+ * _which - Entry point
+ * Description: Find the full path name
+ *
+ * @filename: File name
+ * @path: PATH environment variable
+ * Return: Full path name if found, NULL if not found.
+ */
+char *_which(char *filename, char *path)
+{
+    char *path1 = _getenv("PATH1");
+    char *path_cpy;
+    char *tokens[1024];
+    char *pathname;
+    int i;
+
+    if (path == NULL && path1 == NULL)
+    {
+        return NULL;
+    }
+
+    if (path == NULL)
+    {
+        path_cpy = strdup(path1);
+    }
+    else
+    {
+        path_cpy = strdup(path);
+    }
+
+    if (path_cpy == NULL)
+    {
+        return NULL;
+    }
+
+    /* Tokenize path */
+    i = 0;
+    tokens[i] = strtok(path_cpy, ":");
+
+    while (tokens[i] != NULL)
+    {
+        pathname = malloc(strlen(tokens[i]) + strlen(filename) + 2);
+        _strcpy(pathname, tokens[i]);
+        _strcat(pathname, "/");
+        _strcat(pathname, filename);
+
+        if (check_path(pathname))
+        {
+            free(path_cpy);
+            return pathname;
+        }
+
+        free(pathname);
+        i++;
+        tokens[i] = strtok(NULL, ":");
+    }
+
+    free(path_cpy);
+    return NULL;
+}

@@ -177,63 +177,34 @@ return (2);
 
 return (0);
 }
-
-/**
- * main - Simple shell.
- * @argv: Argument list.
- * @argc: Argument count.
- * Return: Exit status.
- */
-int main(int argc __attribute__((unused)), char **argv)
+int _atoi(char *str)
 {
-char *line = NULL;
-size_t length = 0;
-char *tokens[buffer];
-int cnt, result;
-char *fullpath;
-int exit_status = 0;
+	int result = 0; /* stores converted int */
+	int is_positive = 1; /* track int if it is +ve */
+	int i = 0; /* counter */
 
-while (1)
-{
-result = handle_prompt(&length, &line);
+	/* check if the char at index 0 is -ve / +ve */
+	if (str[0] == '-')
+	{
+		is_positive = -1;
+		i = 1;
+	} /* End if */
 
-if (result == 1)
-break;
-
-cnt = 0;
-tokens[cnt] = strtok(line, " \t\n");
-
-while (tokens[cnt] != NULL)
-{
-cnt++;
-tokens[cnt] = strtok(NULL, " \t\n");
-}
-
-tokens[cnt] = NULL;
-fullpath = tokens[0];
-
-result = check_builtins(cnt, tokens, &exit_status, argv);
-
-if (result == 1)
-break;
-else if (result == 2)
-continue;
-
-result = _ch(argv, tokens, &fullpath, &exit_status);
-
-if (result == 1)
-break;
-else if (result == 2)
-continue;
-
-result = exec_command(&exit_status, fullpath, tokens);
-
-if (result == 1)
-break;
-else if (result == 2)
-continue;
-}
-
-free(line);
-return (exit_status);
-}
+	/* Iterate through the loop */
+	while (str[i] != '\0')
+	{
+		/* Validate if the current char is digit */
+		if (str[i] >= '0' && str[i] <= '9')
+		{
+			/* convert to digit and update result */
+			result = result * 10 + (str[i] - '0');
+			i++;
+		} /* end if */
+		else
+		{
+			/* for a non digit char */
+			break;
+		} /* end else */
+	} /* end while */
+	return (is_positive * result);
+} /* ens function */
