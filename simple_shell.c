@@ -16,11 +16,11 @@ typedef struct {
 
 void display_prompt(void);
 
-char *validate_input(char **arguments);
+char *validate_input(void);
 
-int hsh_exit(char **args, int *exit_status);
+int hsh_exit(int *exit_status);
 
-int hsh_env(char **args, int *exit_status);
+int hsh_env(int *exit_status);
 
 int hsh_cd(char **args, int *exit_status);
 
@@ -65,16 +65,16 @@ void display_prompt(void) {
     }
 }
 
-char *validate_input(char **arguments) {
+char *validate_input(void) {
     return strdup("/bin/ls");
 }
 
-int hsh_exit(char **args, int *exit_status) {
+int hsh_exit(int *exit_status) {
     *exit_status = 0;
     return 0;
 }
 
-int hsh_env(char **args, int *exit_status) {
+int hsh_env(int *exit_status) {
     return 1;
 }
 
@@ -95,7 +95,7 @@ int hsh_execute(char **arguments, int *exit_status) {
     int status;
     char *new_arguments;
 
-    new_arguments = validate_input(arguments);
+    new_arguments = validate_input();
     if (strcmp(new_arguments, "Fail access") == 0)
         return 1;
 
