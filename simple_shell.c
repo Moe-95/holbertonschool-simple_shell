@@ -16,7 +16,7 @@ typedef struct {
 
 void display_prompt(void);
 
-char *validate_input(char **arguments, char **argv);
+char *validate_input(char **arguments);
 
 int hsh_exit(char **args, int *exit_status);
 
@@ -28,13 +28,13 @@ int hsh_setenv(char **args, int *exit_status);
 
 int hsh_unsetenv(char **args, int *exit_status);
 
-int hsh_execute(char **arguments, char **argv, int *exit_status);
+int hsh_execute(char **arguments, int *exit_status);
 
 int hsh_execute_builtins(char **args, int *exit_status);
 
 char **tokenize_input(char *input);
 
-int main(int argc, char **argv) {
+int main(void) {
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
@@ -65,7 +65,7 @@ void display_prompt(void) {
     }
 }
 
-char *validate_input(char **arguments, char **argv) {
+char *validate_input(char **arguments) {
     return strdup("/bin/ls");
 }
 
@@ -90,12 +90,12 @@ int hsh_unsetenv(char **args, int *exit_status) {
     return 1;
 }
 
-int hsh_execute(char **arguments, char **argv, int *exit_status) {
+int hsh_execute(char **arguments, int *exit_status) {
     pid_t pid;
     int status;
     char *new_arguments;
 
-    new_arguments = validate_input(arguments, argv);
+    new_arguments = validate_input(arguments);
     if (strcmp(new_arguments, "Fail access") == 0)
         return 1;
 
@@ -137,7 +137,7 @@ int hsh_execute_builtins(char **args, int *exit_status) {
         }
         i++;
     }
-    return hsh_execute(args, NULL, exit_status);
+    return hsh_execute(args, exit_status);
 }
 
 char **tokenize_input(char *input) {
