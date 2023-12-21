@@ -37,7 +37,7 @@ void execute_command(char *command, char **path_array)
         exit(EXIT_FAILURE);
     }
 
-    args[0] = strtok(command, " "); // Tokenize the command
+    args[0] = strtok(command, " ");
     for (i = 1; i < BUF_SIZE; i++)
     {
         args[i] = strtok(NULL, " ");
@@ -60,7 +60,7 @@ void execute_command(char *command, char **path_array)
 
     for (i = 0; path_array[i] != NULL; i++)
     {
-        char temp[BUF_SIZE]; // Move the declaration here
+        char temp[BUF_SIZE];
         snprintf(temp, BUF_SIZE, "%s/%s", path_array[i], args[0]);
 
         if (access(temp, F_OK | X_OK) == 0)
